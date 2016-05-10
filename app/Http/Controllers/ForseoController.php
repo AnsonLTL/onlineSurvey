@@ -5,21 +5,19 @@ namespace App\Http\Controllers;
 use App\forseo;
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use App\Http\Requests\ForseoRequest;
 
 class ForseoController extends Controller
 {
     protected $forseos;
     public function index() {
-        $alert = "";
         return view('mostiB');
     }
-    public function store(Request $request) {
+    public function create() {
+        return view('mostiB');
+    }
+    public function store(ForseoRequest $request) {
         $success = 1;
-        $this->validate($request, [
-            'staffid' => 'required|unique:forseos',
-            'authornames' => 'required',
-            'forarea' => 'required'
-        ]);
 
         $forseo = new Forseo;
         $forseo->staffid = $request->staffid;
@@ -28,9 +26,20 @@ class ForseoController extends Controller
         $forseo->seo = $request->seo;
         $forseo->comments = $request->comments;
         $forseo->save();
+
+        //Forseo::create(Request::all());
         return view('mostiB', compact('success'));
     }
-    public function all(Request $request) {
+    public function edit($id) {
+        $forseo = Forseo::where('staffid', '=', $id)->firstOrFail();
+        return view('mostiEdit', compact('forseo'));
+    }
+    public function update($staffid, ForseoRequest $request) {
+        $forseo = Forseo::where('staffid', '=', $staffid)->firstOrFail();
+        $forseo->update($request->all());
+        return redirect('/mosti');
+    }
+    public function all() {
         $forseos = Forseo::all();
         return view('mostiall', [
             'forseos' => $forseos,

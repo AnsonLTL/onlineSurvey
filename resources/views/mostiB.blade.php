@@ -17,6 +17,9 @@
     <p><a class="btn btn-primary btn-lg" href="{{url('/info')}}">
         Learn More>>
     </a></p>
+    <p><a id="edit" class="btn btn-primary btn-lg" href="#">
+            Edit Survey>>
+        </a></p>
 @endsection
 
 @section('content')
@@ -31,7 +34,7 @@
                         'class' => 'col-sm-3 control-label required'
                         ]) !!}
                     <div class="col-sm-9">
-                        {!! Form::text('staff-id', null, [
+                        {!! Form::text('staffid', null, [
                             'class' => 'form-control',
                             'id' => 'staff-id',
                             'title' => 'staff id',
@@ -68,10 +71,11 @@
                             'id' => 'forarea',
                             'title' => 'for',
                             'placeholder' => 'FOR',
-                            'required' => 'required'
+                            'required' => 'required',
+                            'readonly' => 'true'
                             ]) !!}
-                        <select id="forarea_sel" class="col-sm-9">
-                            <option selected="selected" disabled="disabled">Select one</option>
+                        <select id="forarea_sel">
+                            <option selected="selected" disabled="disabled">Select</option>
                             <option>try</option>
                             <option>Try2</option>
                         </select><br/>
@@ -89,10 +93,11 @@
                             'class' => 'form-control',
                             'id' => 'seo',
                             'title' => 'SEO',
-                            'placeholder' => 'SEO'
+                            'placeholder' => 'SEO',
+                            'readonly' => 'true'
                             ]) !!}
-                        <select id="seo_sel" class="col-sm-9">
-                            <option id="test1" selected disabled>Select one</option>
+                        <select id="seo_sel">
+                            <option id="test1" selected disabled>Select</option>
                             <option>try</option>
                             <option>Try2</option>
                         </select><br/>
@@ -134,6 +139,7 @@
 
 @section('script')
     <script>
+        document.getElementById('edit').onclick = function(){edit();};
         document.getElementById('subBtn').onclick = function(){submitEvent();};
         document.getElementById('clrBtn').onclick = function(){clearEvent();};
         document.getElementById('forarea_sel').onchange = function(){forareaSel();};
@@ -220,11 +226,52 @@
             document.getElementById("seo").value = fullSeoText;
             document.getElementById('form1').submit();
         }
+        function edit() {
+            var staffid = prompt("Please enter the Staff id");
+            if (staffid != null) {
+                alert(window.location.href + '/' + staffid + '/edit');
+                window.location = window.location.href + '/' + staffid + '/edit';
+            }
+        }
         function clearEvent() {
             document.getElementById("staff-id").value = "";
             document.getElementById("author-names").value = "";
+
+            var forList = document.getElementById("for_ul");
+            while (forList.firstChild) {
+                forList.removeChild(forList.firstChild);
+            }
+            var forSelect = document.getElementById("forarea_sel");
+            while (forSelect.childNodes.length > 2) {
+                forSelect.removeChild(forSelect.lastChild);
+            }
+            var forOption = document.createElement("option");
+            var forOption2 = document.createElement("option");
+            forOption.text = "try";
+            forSelect.add(forOption);
+            forOption2.text = "Try2";
+            forSelect.add(forOption2);
             fullForText = "";
+            document.getElementById("for_text").innerHTML="";
+
+            var seoList = document.getElementById("seo_ul");
+            while (seoList.firstChild) {
+                seoList.removeChild(seoList.firstChild);
+            }
+            var seoSelect = document.getElementById("seo_sel");
+            while (seoSelect.childNodes.length > 2) {
+                seoSelect.removeChild(seoSelect.lastChild);
+            }
+            var seoOption = document.createElement("option");
+            var seoOption2 = document.createElement("option");
+            seoOption.text = "try";
+            seoSelect.add(seoOption);
+            seoOption2.text = "Try2";
+            seoSelect.add(seoOption2);
+
             fullSeoText = "";
+            document.getElementById("seo_text").innerHTML="";
+
             document.getElementById("comments").value = "";
         }
     </script>

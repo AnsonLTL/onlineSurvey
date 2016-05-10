@@ -14,20 +14,27 @@
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::get('mosti', 'ForseoController@index');
-Route::post('mosti', 'ForseoController@store');
 Route::get('info', function () {
     return view('info');
 });
+Route::resource('mosti','ForseoController');
+Route::get('mostiall', 'ForseoController@all');
 
+/*
+//Before using Route Resources
+Route::get('mosti', 'ForseoController@index');
+Route::post('mosti', 'ForseoController@store');
+*/
+
+
+/*
+//Just for testing
 Route::get('/mostiOri', function () {
     $alert = "";
     return view('mosti', compact('alert'));
 });
 
 
-Route::get('mostiall', 'ForseoController@all');
 Route::get('test', 'ForseoController@tryPassValue');
 Route::get('test2', 'ForseoController@tryPassValue2');
-
+*/
